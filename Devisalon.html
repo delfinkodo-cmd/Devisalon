@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Devi Salon — Kecantikan Anda, Prioritas Kami</title>
+  <meta name="description" content="Devi Salon - potong rambut, facial, manicure & pedicure. Booking online mudah dan cepat." />
+  <style>
+    /* ====== RESET / BASE ====== */
+    * {box-sizing: border-box;}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* ====== THEME ====== */
+    :root{
+      --pink-600:#ff4d79;
+      --pink-500:#ff7ea5;
+      --bg1:linear-gradient(135deg,#fff5f8,#fff);
+      --card-shadow: 0 8px 24px rgba(15,15,15,0.08);
+      --muted:#6b6b6b;
+      --glass: rgba(255,255,255,0.6);
+    }
+
+    body{background:var(--bg1);color:#222;line-height:1.45}
+
+    /* ====== NAV ====== */
+    header{
+      position:sticky;top:0;z-index:40;
+      backdrop-filter: blur(6px);
+      background:rgba(255,255,255,0.55);
+      border-bottom:1px solid rgba(0,0,0,0.04);
+    }
+    .container{max-width:1100px;margin:0 auto;padding:0 18px;}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;padding:14px 0;
+    }
+    .brand{display:flex;gap:12px;align-items:center;font-weight:700;font-size:1.1rem;color:var(--pink-600)}
+    .brand .logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--pink-500),var(--pink-600));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+    nav ul{display:flex;gap:14px;align-items:center;margin:0;padding:0;list-style:none}
+    .cta{background:var(--pink-600);color:white;padding:9px 14px;border-radius:10px;box-shadow:var(--card-shadow);cursor:pointer}
+    .menu-toggle{display:none}
+
+    /* ====== HERO ====== */
+    .hero{
+      display:grid;grid-template-columns:1fr 430px;gap:28px;align-items:center;padding:36px 0;
+    }
+    .hero-left h1{font-size:2.1rem;margin:0 0 12px}
+    .hero-left p{color:var(--muted);margin:0 0 18px}
+    .hero-hero-card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+      border-radius:16px;padding:18px;box-shadow:var(--card-shadow);
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .hero-hero-card .big-img{height:220px;border-radius:10px;overflow:hidden;background:url('https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat}
+
+    /* ====== SERVICES ====== */
+    .section-title{display:flex;align-items:baseline;gap:12px;margin:10px 0 18px}
+    .section-title h2{margin:0;font-size:1.25rem}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .card{
+      background:white;border-radius:12px;padding:12px;box-shadow:var(--card-shadow);overflow:hidden;
+      transition:transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(15,15,15,0.1)}
+    .card h3{margin:10px 0 6px;color:var(--pink-600)}
+    .card p{margin:0;color:var(--muted);font-size:0.95rem}
+
+    /* ====== PRICING ====== */
+    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+
+    /* ====== GALLERY ====== */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .gallery img{height:140px;object-fit:cover;border-radius:8px;cursor:pointer;transition:transform .18s ease}
+    .gallery img:hover{transform:scale(1.03)}
+
+    /* ====== BOOKING FORM ====== */
+    form.card.form-book{display:flex;flex-direction:column;gap:10px;padding:14px}
+    label{font-size:0.85rem;color:#333}
+    input[type="text"],input[type="email"],input[type="tel"],select,textarea,input[type="date"],input[type="time"]{
+      width:100%;padding:10px;border-radius:8px;border:1px solid #e7e7e7;background:white;font-size:0.95rem;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .row{display:flex;gap:10px}
+    .row .col{flex:1}
+    .muted{color:var(--muted);font-size:0.9rem}
+
+    /* ====== FOOTER ====== */
+    footer{margin-top:28px;padding:22px 0;background:linear-gradient(90deg,var(--pink-500),var(--pink-600));color:white;border-radius:8px}
+
+    /* ====== MODAL LIGHTBOX ====== */
+    .lightbox{
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:120;
+    }
+    .lightbox.active{display:flex}
+    .lightbox img{max-width:92%;max-height:86%;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+
+    /* ====== ADMIN PANEL (simple) ====== */
+    .admin-panel{background:#fff;border-radius:12px;padding:12px;box-shadow:var(--card-shadow)}
+    .small{font-size:0.85rem;color:var(--muted)}
+
+    /* ====== RESPONSIVE ====== */
+    @media(max-width:980px){
+      .hero{grid-template-columns:1fr;gap:18px}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .menu-toggle{display:block}
+      nav ul{display:none}
+    }
+    @media(max-width:560px){
+      .gallery img{height:110px}
+    }
+
+    /* ====== ANIMATIONS ====== */
+    .fade-in{animation:fadeIn .6s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    /* small helpers */
+    .center{text-align:center}
+    .spaced{display:flex;gap:10px;align-items:center}
+    .tag{background:rgba(255,77,121,0.1);padding:6px 10px;border-radius:999px;color:var(--pink-600);font-weight:600;font-size:0.95rem}
+    .price{font-weight:700;color:var(--pink-600)}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="
+  position:fixed;inset:0;
+  background:white;
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+">
+  <div style="background:#fff;padding:20px 24px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.15);max-width:300px;width:100%">
+    <h2 style="text-align:center;margin:0 0 16px;color:var(--pink-600)">Login</h2>
+    <label>Username</label>
+    <input id="loginUser" type="text" style="width:100%;padding:8px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc">
+    <label>Password</label>
+    <input id="loginPass" type="password" style="width:100%;padding:8px;margin-bottom:14px;border-radius:8px;border:1px solid #ccc">
+    <button onclick="checkLogin()" style="width:100%;padding:10px;border:0;border-radius:8px;background:var(--pink-600);color:white;font-weight:600">Masuk</button>
+    <div id="loginError" style="color:red;font-size:0.85rem;margin-top:8px;display:none;text-align:center">Username atau password salah!</div>
+  </div>
+  
+</div>
+
+  <header>
+    <marquee behavior="scroll" direction="left" scrollamount="6" style="font-size: 20px; font-weight: bold; color: #d63384;">
+    Selamat Datang di Devi Salon
+</marquee>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">DS</div>
+        <div>
+          <div>Devi Salon</div>
+          <div style="font-size:0.80rem;color:var(--muted)">Kecantikan Anda, Prioritas Kami</div>
+        </div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#services">Layanan</a></li>
+          <li><a href="#pricing">Harga</a></li>
+          
+          <li><a href="#booking">Booking</a></li>
+          <li><a href="#contact">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <div class="spaced">
+      
+        <button class="cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Booking Sekarang</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-bottom:36px">
+    <!-- HERO -->
+    <section class="hero" aria-label="hero">
+      <div class="hero-left fade-in">
+    
+
+        <p>Menyediakan potong rambut, facial, manicure & pedicure dengan tenaga profesional. Datang untuk relaksasi — pulang dengan penampilan baru.</p>
+
+        <div style="display:flex;gap:10px;margin-top:14px;align-items:center">
+          <button class="cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">Booking Sekarang</button>
+          <a href="#pricing" class="small muted" style="align-self:center">Lihat Harga →</a>
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+          <div class="card" style="min-width:210px;display:flex;gap:12px;align-items:center">
+            <div style="width:58px;height:58px;border-radius:8px;background:linear-gradient(135deg,var(--pink-500),var(--pink-600));display:flex;align-items:center;justify-content:center;color:white;font-weight:700">★</div>
+            <div>
+              <div style="font-weight:700">Terapis Berpengalaman</div>
+              <div class="muted" style="font-size:0.9rem">Lebih dari 5 tahun</div>
+            </div>
+          </div>
+          <div class="card" style="min-width:210px;display:flex;gap:12px;align-items:center">
+            <div style="width:58px;height:58px;border-radius:8px;background:linear-gradient(135deg,#fbe8ef,#ffddeb);display:flex;align-items:center;justify-content:center;color:var(--pink-600);font-weight:700">✓</div>
+            <div>
+              <div style="font-weight:700">Produk Berkualitas</div>
+              <div class="muted" style="font-size:0.9rem">Skincare & treatment terpercaya</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SERVICES -->
+    <section id="services" style="margin-top:26px">
+      <div class="section-title">
+        <h2>Layanan Unggulan</h2>
+        <div class="muted small">Pilihan perawatan yang sering dipilih pelanggan</div>
+      </div>
+
+      <div class="cards">
+        <article class="card fade-in" aria-labelledby="s1">
+          <img src="images/potongrambut.jpeg">
+          <h3 id="s1">Potong Rambut</h3>
+          <p>Gaya rambut  wanita, termasuk styling, smoothing, dan treatment potong model terbaru.</p>
+        </article>
+
+        <article class="card fade-in" aria-labelledby="s2">
+          <img src="images/facialwash.jpeg">
+          <h3 id="s2">Facial Wajah</h3>
+          <p>Perawatan kulit menyeluruh: cleansing, exfoliation, masker, dan finishing sesuai tipe kulit.</p>
+        </article>
+
+        <article class="card fade-in" aria-labelledby="s3">
+  <img src="images/kuku.jpeg" alt="Manicure & Pedicure" style="margin-bottom:10px;">
+ 
+  <h3 id="s3">Manicure & Pedicure</h3>
+  <p>Perawatan kuku, kutikula, dan pewarnaan dengan pilihan warna trendi.</p>
+</article>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" style="margin-top:26px">
+      <div class="section-title">
+        <h2>Harga & Paket</h2>
+        <div class="muted small">Transparan & tanpa biaya tersembunyi</div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="card">
+          <h3>Potong Rambut</h3>
+          <p class="muted">Potong + styling</p>
+          <div style="margin-top:8px"><span class="price">Rp 60.000</span></div>
+        </div>
+        <div class="card">
+          <h3>Facial Basic</h3>
+          <p class="muted">Cleansing + masker</p>
+          <div style="margin-top:8px"><span class="price">Rp 120.000</span></div>
+        </div>
+        <div class="card">
+          <h3>Facial Premium</h3>
+          <p class="muted">Detox + serum + massage</p>
+          <div style="margin-top:8px"><span class="price">Rp 250.000</span></div>
+        </div>
+        <div class="card">
+          <h3>Manicure</h3>
+          <p class="muted">Perawatan kuku tangan</p>
+          <div style="margin-top:8px"><span class="price">Rp 80.000</span></div>
+        </div>
+        <div class="card">
+          <h3>Pedicure</h3>
+          <p class="muted">Perawatan kuku kaki</p>
+          <div style="margin-top:8px"><span class="price">Rp 100.000</span></div>
+        </div>
+      </div>
+    </section>
+
+    
+    </section>
+    <!-- BOOKING -->
+    <section id="booking" style="margin-top:26px">
+      <div class="section-title">
+        <h2>Form Booking</h2>
+        <div class="muted small">Isi data — kami konfirmasi via telepon atau email</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:18px">
+        <form class="card form-book" onsubmit="return handleBooking(event)">
+          <label for="name">Nama Lengkap</label>
+          <input id="name" type="text" required placeholder="Nama Anda">
+
+          <div class="row">
+            <div class="col">
+              <label for="phone">No. Telepon</label>
+              <input id="phone" type="tel" required placeholder="08xx...">
+            </div>
+            <div class="col">
+              <label for="email">Email (opsional)</label>
+              <input id="email" type="email" placeholder="email@contoh.com">
+            </div>
+          </div>
+
+          <label for="service">Pilih Layanan</label>
+          <select id="service" required>
+            <option value="">-- Pilih --</option>
+            <option>Potong Rambut</option>
+            <option>Facial Basic</option>
+            <option>Facial Premium</option>
+            <option>Manicure</option>
+            <option>Pedicure</option>
+            <option>Paket Wedding</option>
+          </select>
+
+          <div class="row">
+            <div class="col">
+              <label for="date">Tanggal</label>
+              <input id="date" type="date" required>
+            </div>
+            <div class="col">
+              <label for="time">Waktu</label>
+              <input id="time" type="time" required>
+            </div>
+          </div>
+
+          <label for="note">Catatan / Permintaan Khusus</label>
+          <textarea id="note" placeholder="Contoh: ingin treatment khusus, alergi, dsb."></textarea>
+
+          <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:6px">
+            <div class="muted small">Kami akan menghubungi untuk konfirmasi.</div>
+            <div style="display:flex;gap:8px">
+              <button type="button" class="small" onclick="resetForm()" style="background:#f1f1f1;padding:8px 12px;border-radius:8px;border:0">Reset</button>
+              <button type="submit" class="cta">Kirim Booking</button>
+            </div>
+          </div>
+        </form>
+
+        <aside>
+          <div class="card small">
+            <h3>Info Cepat</h3>
+            <p class="muted">Alamat: Jl. Melati No.37 Pasar Minggu, Jakarta Selatan</p>
+            <p class="muted">Jam operasional: 09:00 - 19:00 (Senin - Sabtu)</p>
+            <p class="muted">Telp: 0812-9592-7601</p>
+            <hr />
+            <div style="margin-top:8px">
+              <h4 style="margin:0 0 8px">Admin Panel</h4>
+              <div class="small muted">Masukkan kata sandi admin untuk melihat booking yang tersimpan (hanya client-side).</div>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <input id="adminPass" type="password" placeholder="Kata sandi admin" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e7e7e7">
+                <button onclick="openAdmin()" style="padding:8px 10px;border-radius:8px;border:0;background:var(--pink-600);color:white">Masuk</button>
+              </div>
+              <div id="adminArea" style="margin-top:10px;display:none"></div>
+            </div>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="card small">
+            <h4 style="margin:0 0 8px">Cara Booking</h4>
+            <ol style="padding-left:18px;margin:0" class="small muted">
+              <li>Pilih layanan & tanggal.</li>
+              <li>Kami akan mengonfirmasi via telepon atau email.</li>
+              <li>Datang 10 menit lebih awal untuk persiapan.</li>
+            </ol>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section style="margin-top:26px">
+      <div class="section-title">
+        <h2>Testimoni</h2>
+        <div class="muted small">Dari pelanggan yang puas</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+        <div class="card"><strong>Marsi</strong><div class="muted small">"Potong rambutnya rapih & cepat — stafnya ramah!"</div></div>
+        <div class="card"><strong>Airin</strong><div class="muted small">"Facial premium recommended. Kulit terasa halus."</div></div>
+        <div class="card"><strong>Lilis</strong><div class="muted small">"Manicure-nya tahan lama, warna sesuai ekspektasi."</div></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" style="margin-top:26px">
+      <div class="section-title">
+        <h2>Kontak & Lokasi</h2>
+        <div class="muted small">Hubungi kami untuk pertanyaan atau kerjasama</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:18px">
+        <div class="card">
+          <h3>Hubungi Kami</h3>
+          <p class="muted">Telp: 0812-95927601 • Email: info@devisalon</p>
+          <p class="muted">Sosial media: @devisalon</p>
+
+          <div style="margin-top:8px">
+            <h4 style="margin:0 0 8px">Lokasi</h4>
+            <div class="map" style="border-radius:12px;overflow:hidden">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2205042458275!2d106.8328769!3d-6.236604799999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f20b6be91e37%3A0xd680b0d1a28dd4e3!2sJl.%20Melati%20No.37%2C%20RT.6%2FRW.1%2C%20Pejaten%20Bar.%2C%20Kec.%20Ps.%20Minggu%2C%20Kota%20Jakarta%20Selatan%2C%20Daerah%20Khusus%20Ibukota%20Jakarta%2012520!5e0!3m2!1sid!2sid!4v1692118193484!5m2!1sid!2sid" 
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Form Kontak</h3>
+          <form id="contactForm" onsubmit="return handleContact(event)">
+            <label>Nama</label>
+            <input id="c_name" type="text" required>
+            <label>Email</label>
+            <input id="c_email" type="email">
+            <label>Pesan</label>
+            <textarea id="c_msg" required></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button class="cta" type="submit">Kirim Pesan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>&copy; <span id="year"></span> Devi Salon • Semua hak cipta</div>
+      <div class="muted small">Dibuat dengan ♥ oleh Devi Salon</div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <img id="lightboxImg" src="" alt=""/>
+  </div>
+
+  <script>
+    /* ====== UTIL ====== */
+    const $ = (id) => document.getElementById(id);
+
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ====== LIGHTBOX ====== */
+    function openLightbox(imgEl){
+      $('lightboxImg').src = imgEl.src;
+      document.getElementById('lightbox').classList.add('active');
+    }
+    function closeLightbox(e){
+      if(e.target.id === 'lightbox' || e.target.id === 'lightboxImg') {
+        document.getElementById('lightbox').classList.remove('active');
+      }
+    }
+
+    /* ====== BOOKING STORAGE / VALIDATION ====== */
+    const STORAGE_KEY = 'deviSalonBookings_v1';
+    function readBookings() {
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      }catch(e){ return [];}
+    }
+    function saveBookings(list){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+    function handleBooking(e){
+      e.preventDefault();
+      const name = $('name').value.trim();
+      const phone = $('phone').value.trim();
+      const email = $('email').value.trim();
+      const service = $('service').value;
+      const date = $('date').value;
+      const time = $('time').value;
+      const note = $('note').value.trim();
+      if(!name || !phone || !service || !date || !time){
+        alert('Lengkapi semua bidang yang wajib.');
+        return false;
+      }
+      const selected = new Date(date + 'T' + time);
+      const now = new Date();
+      if(selected < new Date(now.getTime() - 5*60*1000)){
+        alert('Tanggal/waktu yang dipilih sudah lewat.');
+        return false;
+      }
+      const booking = {
+        id: 'B' + Date.now(),
+        name, phone, email, service, date, time, note,
+        createdAt: new Date().toISOString(),
+        status: 'pending'
+      };
+      const list = readBookings();
+      list.unshift(booking);
+      saveBookings(list);
+      alert('Booking berhasil dikirim!');
+      e.target.reset();
+      return false;
+    }
+    function resetForm(){
+      if(confirm('Reset semua input?')) document.querySelector('form.form-book').reset();
+    }
+
+    /* ====== CONTACT FORM ====== */
+    function handleContact(e){
+      e.preventDefault();
+      const n = $('c_name').value.trim();
+      const msg = $('c_msg').value.trim();
+      if(!n || !msg){ alert('Nama dan pesan wajib diisi.'); return false; }
+      alert('Terima kasih! Pesan Anda telah terkirim.');
+      e.target.reset();
+      return false;
+    }
+
+    /* ====== ADMIN PANEL ====== */
+    function openAdmin(){
+      const pass = $('adminPass').value;
+      const adminArea = $('adminArea');
+      adminArea.innerHTML = '';
+      if(pass === 'deviadmin'){
+        const list = readBookings();
+        if(list.length === 0){
+          adminArea.innerHTML = '<div class="muted small">Belum ada booking.</div>';
+        } else {
+          const table = document.createElement('div');
+          table.style.maxHeight = '180px';
+          table.style.overflow = 'auto';
+          table.style.display = 'grid';
+          table.style.gap = '8px';
+          list.forEach(b => {
+            const item = document.createElement('div');
+            item.style.padding = '8px';
+            item.style.borderRadius = '8px';
+            item.style.background = '#f9f9f9';
+            item.innerHTML = `<div style="display:flex;justify-content:space-between;gap:8px">
+              <div><strong>${escapeHtml(b.name)}</strong> • <span class="small muted">${b.service}</span></div>
+              <div class="small muted">${b.date} ${b.time}</div>
+            </div>
+            <div class="small muted">${escapeHtml(b.phone)} ${b.email ? '• ' + escapeHtml(b.email) : ''}</div>
+            <div class="small muted" style="margin-top:6px">${escapeHtml(b.note || '')}</div>
+            <div style="display:flex;gap:8px;margin-top:6px">
+              <button onclick='changeStatus("${b.id}","confirmed",this)'>Konfirmasi</button>
+              <button onclick='changeStatus("${b.id}","cancelled",this)'>Batalkan</button>
+            </div>`;
+            table.appendChild(item);
+          });
+          adminArea.appendChild(table);
+          adminArea.innerHTML += `<div style="margin-top:8px"><button onclick="clearBookings()">Hapus Semua</button></div>`;
+        }
+        adminArea.style.display = 'block';
+      } else {
+        alert('Kata sandi admin salah.');
+      }
+    }
+    function changeStatus(id,newStatus,btn){
+      const list = readBookings();
+      const idx = list.findIndex(x => x.id === id);
+      if(idx >= 0){
+        list[idx].status = newStatus;
+        saveBookings(list);
+        alert('Status diubah: ' + newStatus);
+        openAdmin();
+      }
+    }
+    function clearBookings(){
+      if(confirm('Hapus semua booking?')){
+        localStorage.removeItem(STORAGE_KEY);
+        openAdmin();
+        alert('Semua booking dihapus.');
+      }
+    }
+    function escapeHtml(s){
+      if(!s) return '';
+      return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+    }
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape'){
+        document.getElementById('lightbox').classList.remove('active');
+      }
+    });
+    (function prefillDate(){
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      const today = `${y}-${m}-${day}`;
+      const dateInput = $('date');
+      if(dateInput) dateInput.min = today;
+    })();
+
+    /* ====== SIMPLE LOGIN ====== */
+    function checkLogin(){
+      const user = $('loginUser').value.trim();
+      const pass = $('loginPass').value.trim();
+      if(user === 'admin' && pass === '1234'){
+        document.getElementById('loginScreen').style.display = 'none';
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
